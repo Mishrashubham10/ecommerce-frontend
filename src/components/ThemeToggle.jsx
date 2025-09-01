@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +10,7 @@ import {
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { Button } from './ui/button';
 import { Monitor, Moon, Sun } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const themes = [
   { id: 1, name: 'Dark', Icon: Moon, value: 'dark' },
@@ -21,10 +22,16 @@ export default function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="ghost" size="icon">
           {resolvedTheme === 'dark' ? (
             <Moon className="size-4" />
           ) : (
@@ -35,7 +42,14 @@ export default function ThemeToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {themes.map(({ id, name, Icon, value }) => (
-          <DropdownMenuItem key={id} onClick={() => setTheme(value)}>
+          <DropdownMenuItem
+            key={id}
+            onClick={() => setTheme(value)}
+            className={cn(
+              'cursor-pointer',
+              theme === value && 'bg-accent text-accent-foreground'
+            )}
+          >
             {name}
             <Icon className="size-4" />
           </DropdownMenuItem>
