@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
 import Navbar from '@/components/Navbar';
+import { Providers } from '@/redux/store';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -24,17 +25,17 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Navbar />
-          <main>
-            {children}
-          </main>
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            <main>{children}</main>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
